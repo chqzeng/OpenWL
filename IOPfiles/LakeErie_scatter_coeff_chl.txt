@@ -1,0 +1,17 @@
+"CHLOROPHYLL-SPECIFIC ABSORPTION" coefficient, achl*(wavelength) in m^2/mg, 
+for use by the IOP (ab) and chlorophyll-fluorescence routines.  This file contains 
+the ac*' data of Prieur and Sathyendranath, 1981, Limnol & Oceanogr, 26(4), 671-689, 
+Table 2 Columm 3, scaled so that ac*(440nm) equals 0.05.  This file is consistent 
+with the Prieur-Sathyendranath-Morel model for absorption by Chl (Light & Water Eq. 3.27)
+as used in routine abcase1.  Values below 400 and above 700 nm were extrapolated by eye.
+Note that the abcase1 model normalizes these values to 1 at 440nm, whereas fluorescence routine shatchl (in file shat.f) requires absolute values, as given here. 
+based on the bb/b=0.02:
+wavelength    a*
+(nm)        (m^2/mg)
+532	0.209871973
+630	0.133671616
+650	0.134622383
+676	0.103539677
+700	0.125465035
+880	0.127375677
+-1.0		-1.0
