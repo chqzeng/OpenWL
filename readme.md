@@ -8,14 +8,13 @@ It uses a very simplified light and water interactcion empricical model:  `Rrs =
 
 The purpose of this package is for fast computation and analyze the trend with change IOP (e.g., chl concentration); for a more strict simulation, please use HydroLight/Ecolight [Mobley, et al,https://www.sequoiasci.com/product/hydrolight/]
 
-To simulate Rrs, use [`Simplified_a_bb_2_Rrs_fit_IOP_distr.m`](Simplified_a_bb_2_Rrs_fit_IOP_distr.m)
+To simulate Rrs, use [`OpenLW_simu_Rrs_from_IOP.m`](OpenLW_simu_Rrs_from_IOP.m)
 ```
 >> Rrs=OpenLW_simu_Rrs_from_IOP(0.1:5:20.1,1:10);
 ====finish Rrs simulation, result written to:OpenLW_simu_Rrs_from_IOP_LELW_chl20_mspm10_cdom0.994.csv====
 >> Rrs=OpenLW_simu_Rrs_from_IOP(0.1:5:20.1,1:10,[0.494,0.994],'bAB',false,'bSave',true,'waterIOP','waterIOP_SmithandBaker.txt','IOPname','LakeErie','wavelength',400:100:800);
 ====finish Rrs simulation, result written to:OpenLW_simu_Rrs_from_IOP_LakeErie_chl20_mspm10_cdom0.994.csv====
 >> help OpenLW_simu_Rrs_from_IOP
-...
  Input arguments:
  		v_chl,v_cdom,v_mspm: the value list of chlorophyll-a[mg/m^3], cdom[1/m], and mineral content/mspm[g/m^3]; default cdom is: 0.994 (1/m)
  		sDir_IOP:  the directory where the IOP files are stored; default is the "./IOPfiles"
