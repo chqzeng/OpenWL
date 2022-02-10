@@ -125,7 +125,7 @@ function [ Rrs_table, Rrs ] = OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm, varargin )
     Rrs_table=array2table(Rrs_table,'VariableNames',[{'Chl_mg_m3','MSPM_g_m3','CDOM_1_m'},strcat({'b'},num2str(wavelength'))']);
     if p.Results.bSave
         %csvwrite('test.csv',Rrs);
-        out_file=sprintf('OpenLW_simu_Rrs_from_IOP_%s_chl%.0f_mspm%.0f_cdom%.3f.csv',p.Results.IOPname, max(p.Results.v_chl),max(p.Results.v_mspm),max(p.Results.v_cdom));  
+        out_file=sprintf('OpenWL_simu_Rrs_from_IOP_%s_chl%.0f_mspm%.0f_cdom%.3f.csv',p.Results.IOPname, max(p.Results.v_chl),max(p.Results.v_mspm),max(p.Results.v_cdom));  
         writetable(Rrs_table, out_file, 'WriteVariableNames', true) 
 		disp(['====finish Rrs simulation, result written to:',out_file,'===='])
     end
