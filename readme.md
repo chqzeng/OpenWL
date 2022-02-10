@@ -15,13 +15,13 @@ It uses a simplified light and water interactcion empricical model:  `Rrs = f * 
 
 The purpose of this package is for fast computation and analysis with changing IOPs (e.g., chl concentration); for a stricter simulation, please consider [HydroLight/Ecolight](https://www.sequoiasci.com/product/hydrolight/) by Mobley, et al.
 
-To simulate Rrs, use [`OpenLW_simu_Rrs_from_IOP.m`](OpenLW_simu_Rrs_from_IOP.m), examples:
+To simulate Rrs, use [`OpenWL_simu_Rrs_from_IOP.m`](OpenWL_simu_Rrs_from_IOP.m), examples:
 ```
->> Rrs=OpenLW_simu_Rrs_from_IOP(0.1:5:20.1,1:10);
-====finish Rrs simulation, result written to:OpenLW_simu_Rrs_from_IOP_LELW_chl20_mspm10_cdom0.994.csv====
->> Rrs=OpenLW_simu_Rrs_from_IOP(0.1:5:20.1,1:10,[0.494,0.994],'bAB',false,'bSave',true,'waterIOP','waterIOP_SmithandBaker.txt','IOPname','LakeErie','wavelength',400:100:800);
-====finish Rrs simulation, result written to:OpenLW_simu_Rrs_from_IOP_LakeErie_chl20_mspm10_cdom0.994.csv====
->> help OpenLW_simu_Rrs_from_IOP   %show the help info
+>> Rrs=OpenWL_simu_Rrs_from_IOP(0.1:5:20.1,1:10);
+====finish Rrs simulation, result written to:OpenWL_simu_Rrs_from_IOP_LELW_chl20_mspm10_cdom0.994.csv====
+>> Rrs=OpenWL_simu_Rrs_from_IOP(0.1:5:20.1,1:10,[0.494,0.994],'bAB',false,'bSave',true,'waterIOP','waterIOP_SmithandBaker.txt','IOPname','LakeErie','wavelength',400:100:800);
+====finish Rrs simulation, result written to:OpenWL_simu_Rrs_from_IOP_LakeErie_chl20_mspm10_cdom0.994.csv====
+>> help OpenWL_simu_Rrs_from_IOP   %show the help info
 ```
 
 a comparison of Rrs derived from OpenWL and Ecolight on some test data as follows,
@@ -29,15 +29,15 @@ Rrs_HE_Ecolight   |  Rrs_OpenWL		|Rrs_OpenWL_vs_Ecolight_scatter          |  Wat
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![Rrs_HE_Ecolight](./TestData/Rrs_HE_Ecolight.svg "Rrs_HE_Ecolight")  |  ![Rrs_OpenWL](./TestData/Rrs_OpenWL.svg "Rrs_OpenWL") | ![Rrs_OpenWL_vs_Ecolight_scatter](./TestData/Rrs_OpenWL_vs_Ecolight_scatter.svg "Rrs_OpenWL_vs_Ecolight_scatter")| ![WaterIdx_insitu_vs_simulation](./TestData/WaterIdx_insitu_vs_simulation.svg "WaterIdx_insitu_vs_simulation")
 
-To simulate line-height water indexes for a specific sensor ['HYPER','OLCI','MSI','MERIS','OCI','VIIRS','OLI','MODIS_Aqua','MODIS_Terra'], use [`Simu_water_index.m`](Simu_water_index.m), examples:
+To simulate line-height water indexes for a specific sensor ['HYPER','OLCI','MSI','MERIS','OCI','VIIRS','OLI','MODIS_Aqua','MODIS_Terra'], use [`OpenWL_simu_water_index.m`](OpenWL_simu_water_index.m), examples:
 ```
->> Simu_water_index    %use all default arguments as MCI index, over OCLI sensor
-====finish sensor water index simulation, result written to:./TestData/OpenLW_simu_waterIDX_MCI_of_sensor_OLCI.csv====
->> Simu_water_index('sensor','MERIS','waterIDX','CI')  %same as CI model
-====finish sensor water index simulation, result written to:./TestData/OpenLW_simu_waterIDX_CI_of_sensor_MERIS.csv====
->> Simu_water_index('sensor','HYPER','waterIDX','user','designed_bands',[665, 674, 753])  %same as FLH model
-====finish sensor water index simulation, result written to:./TestData/OpenLW_simu_waterIDX_user_of_sensor_HYPER.csv====
->> help Simu_water_index      %show the help info
+>> OpenWL_simu_water_index    %use all default arguments as MCI index, over OCLI sensor
+====finish sensor water index simulation, result written to:./TestData/OpenWL_simu_waterIDX_MCI_of_sensor_OLCI.csv====
+>> OpenWL_simu_water_index('sensor','MERIS','waterIDX','CI')  %same as CI model
+====finish sensor water index simulation, result written to:./TestData/OpenWL_simu_waterIDX_CI_of_sensor_MERIS.csv====
+>> OpenWL_simu_water_index('sensor','HYPER','waterIDX','user','designed_bands',[665, 674, 753])  %same as FLH model
+====finish sensor water index simulation, result written to:./TestData/OpenWL_simu_waterIDX_user_of_sensor_HYPER.csv====
+>> help OpenWL_simu_water_index      %show the help info
 --------------------------------------------------------------------------------------------------------------------------
 ```
 and simulation result of the above 3 examples are:
