@@ -81,7 +81,7 @@ if strcmp(p.Results.waterIDX,'CI'); waterIDX=-1*waterIDX; end;  %CI needs to rev
 if p.Results.bSave
     Rrs_table=array2table([inter_bands,waterIDX],'VariableNames',[cellstr(num2str(descr_sensor.nominal_centre_wavelength,'b%3.f'))',{p.Results.waterIDX}]);
 	Rrs_table=[Simu_Rrs(:,1:3),Rrs_table];
-    out_file=sprintf('./TestData/OpenLW_simu_waterIDX_%s_of_sensor_%s.csv',p.Results.waterIDX,p.Results.sensor);  
+    out_file=sprintf('./TestData/OpenWL_simu_waterIDX_%s_of_sensor_%s.csv',p.Results.waterIDX,p.Results.sensor);  
     writetable(Rrs_table, out_file, 'WriteVariableNames', true) 
 	disp(['====finish sensor water index simulation, result written to:',out_file,'===='])
 end
