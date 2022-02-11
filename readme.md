@@ -49,5 +49,38 @@ Water index: MCI            |  CI              |  FLH (user-defined)
 <a name="QAA"/>
 
 ## 2. [QAA](https://www.ioccg.org/groups/software.html)
-implemented in python
-TBC
+implemented in python, files in [./QAA](./QAA)
+it relies on python packages: `numpy`
+
+to run QAA, use [`./QAA/OpenWL_QAA6.py`](./QAA/OpenWL_QAA6.py), examples:
+```
+##example1: use default parameters to run a csv file and save the result.
+>>python .\OpenWL_QAA6.py --file 'Rrs_QAA_test.csv' -S  
+
+##example2: run a single spectra with customized parameters.
+>>python .\OpenWL_QAA6.py --wavelength '412,443,489,510,555,670' --Rrs '0.0012,0.00169,0.00329,0.00404,0.00748,0.00346' '--eta' 2.0 1.2 -0.6 '--waterIOP' '../IOPfiles/waterIOP_SmithandBaker.txt'
+===input params:h55x :[-1.1459, -1.36583, -0.46927],A:5,h66x:[0.39, 1.14],
+ eta:[2.0, 1.2, -0.6],zeta:[0.74, 0.2, 0.8],xi :[0.015, 0.002, 0.6]
+===QAA comleted,the absorption of phytoplankton at input bands [N*1,set 0 for failed values; unit: (1/m)]:
+ [0.27205821 0.4042206  0.26982815 0.25434736 0.12065384 0.23782884] ===
+
+>>> python .\OpenWL_QAA6.py -h
+usage: OpenWL_QAA6.py [-h] [-N] [-U] [-R] [-F] [-W] [--h55x  ] [--A] [--h66x ] [--eta  ] [--zeta  ] [--xi  ] [-S]
+Implementation of QAA version 6
+optional arguments:
+  -h, --help          show this help message and exit
+  -N , --wavelength   the wavelength of the input Rrs or rrs bands. default:[412,443,489,510,555,670]
+  -U , --rrs          an sample of under water remote sensing reflectance, dimensions:N*1
+  -R , --Rrs          an sample of above water remote sensing reflectance, dimensions:N*1; if rrs is given, then Rrs is ignored
+  -F , --file         a csv file of *above* water remote sensing reflectance, if --file given, --rrs/--Rrs are ignored ; dimenion:N*M; where there is N samples, with M bands,
+                      each row is a sample; exammple data: Rrs_QAA_test.csv
+  -W , --waterIOP     water absorption curve, dimensions:N*3: 1st column as wavelength, 2nd column abs value (1/m), 3rd for scatter, consistent with Hydrolight; if not provided,
+                      use water abs and bb from ../IOPfiles/waterIOP_sea_water.txt
+  --h55x              parameters in QAA; step 2 left IF, h0,h1,h2
+  --A                 parameters in QAA; step 2 left IF, coeff in the log(...)
+  --h66x              parameters in QAA; step 2 right
+  --eta               parameters in QAA; step 4
+  --zeta              parameters in QAA; step 7A
+  --xi                parameters in QAA; step 7B
+  -S, --save          flag to save the a_ph as .csv file, default is False
+```
