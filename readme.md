@@ -57,6 +57,7 @@ to run QAA, use [`./QAA/OpenWL_QAA6.py`](./QAA/OpenWL_QAA6.py), examples:
 
 ##example1: use default parameters to run a csv file and save the result.
 >>python .\OpenWL_QAA6.py --file 'Rrs_QAA_test.csv' -S  
+===QAA comleted,the absorption of phytoplankton is written to file: aph_Rrs_QAA_test.csv ===
 
 ##example2: run a single spectra with customized parameters.
 >>python .\OpenWL_QAA6.py --wavelength '412,443,489,510,555,670' --Rrs '0.0012,0.00169,0.00329,0.00404,0.00748,0.00346' '--eta' 2.0 1.2 -0.6 '--waterIOP' '../IOPfiles/waterIOP_SmithandBaker.txt'
