@@ -49,11 +49,12 @@ Water index: MCI            |  CI              |  FLH (user-defined)
 <a name="QAA"/>
 
 ## 2. [QAA](https://www.ioccg.org/groups/software.html)
-implemented in python, files in [./QAA](./QAA)
-it relies on python packages: `numpy`
+implemented in python, files in [`./QAA`](./QAA). It relies on python packages: `numpy`
 
 to run QAA, use [`./QAA/OpenWL_QAA6.py`](./QAA/OpenWL_QAA6.py), examples:
 ```
+## enter the `./QAA/` folder , then enter a `python` environment with numpy package.
+
 ##example1: use default parameters to run a csv file and save the result.
 >>python .\OpenWL_QAA6.py --file 'Rrs_QAA_test.csv' -S  
 
