@@ -49,19 +49,19 @@ Water index: MCI            |  CI              |  FLH (user-defined)
 <a name="QAA"/>
 
 ## 2. [QAA](https://www.ioccg.org/groups/software.html)
-implemented in python, files in [`./QAA`](./QAA). It relies on python packages: `numpy`
+implemented in python, files in [`./QAA`](./QAA). It relies on python packages: __numpy__
 
 to run QAA, use [`./QAA/OpenWL_QAA6.py`](./QAA/OpenWL_QAA6.py), examples:
 
-enter the `./QAA/` folder , then enter a `python` environment with `numpy` package.
+- work within [`./QAA`](./QAA) folder , then enter a __python__ environment with __numpy__ package.
 
-example1: use default parameters to run a **csv** file and save the result.
+- example1: use default parameters to run a **csv** file and save the result.
 ```
 >>python .\OpenWL_QAA6.py --file 'Rrs_QAA_test.csv' -S  
 ===QAA comleted,the absorption of phytoplankton is written to file: aph_Rrs_QAA_test.csv ===
 ```
 
-example2: run **a single spectra** with customized parameters.
+- example2: run **a single spectra** with customized parameters.
 ```
 >>python .\OpenWL_QAA6.py --wavelength '412,443,489,510,555,670' --Rrs '0.0012,0.00169,0.00329,0.00404,0.00748,0.00346' '--eta' 2.0 1.2 -0.6 '--waterIOP' '../IOPfiles/waterIOP_SmithandBaker.txt'
 ===input params:h55x :[-1.1459, -1.36583, -0.46927],A:5,h66x:[0.39, 1.14],
@@ -70,7 +70,7 @@ example2: run **a single spectra** with customized parameters.
  [0.27205821 0.4042206  0.26982815 0.25434736 0.12065384 0.23782884] ===
 ```
 
-more details:
+- more details:
 ```
 >>> python .\OpenWL_QAA6.py -h
 usage: OpenWL_QAA6.py [-h] [-N] [-U] [-R] [-F] [-W] [--h55x  ] [--A] [--h66x ] [--eta  ] [--zeta  ] [--xi  ] [-S]
