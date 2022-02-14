@@ -297,14 +297,14 @@ if __name__ == "__main__":
                         default=None,
                         help='a csv file of *above* water remote sensing reflectance, if --file given, --rrs/--Rrs are ignored ; \
                         dimenion:N*M; where there is N samples, with M bands, each row is a sample;\
-                        exammple data: Rrs_QAA_test.csv')                        
+                        example data: Rrs_QAA_test.csv')                        
     parser.add_argument('-W', '--waterIOP', metavar='', 
                         default=None,
-                        help='water absorption curve, dimensions:N*3: 1st column as wavelength, 2nd column abs value (1/m), 3rd for scatter, consistent with Hydrolight;\
+                        help='water absorption curve, dimensions: N*3: 1st column as wavelength, 2nd column abs value (1/m), 3rd for scatter, consistent with Hydrolight;\
                         if not provided, use water abs and bb from ../IOPfiles/waterIOP_sea_water.txt')
     parser.add_argument('--h55x', metavar='', default=[-1.1459,-1.36583,-0.46927], type=float,nargs=3, help='parameters in QAA; step 2 left IF, h0,h1,h2')       
-    parser.add_argument('--A', metavar='', default=5, type=float, help='parameters in QAA; step 2 left IF, coeff in the log(...)') 
-    parser.add_argument('--h66x', metavar='', default=[0.39,1.14], type=float,nargs=2, help='parameters in QAA; step 2 right') 
+    parser.add_argument('--A', metavar='', default=5, type=float, help='parameters in QAA; step 2 left IF, coefficient in the log(...)') 
+    parser.add_argument('--h66x', metavar='', default=[0.39,1.14], type=float,nargs=2, help='parameters in QAA; step 2 Right ELSE') 
     parser.add_argument('--eta', metavar='', default=[2.0,1.2,-0.9], type=float,nargs=3, help='parameters in QAA; step 4') 
     parser.add_argument('--zeta', metavar='', default=[0.74,0.2,0.8], type=float,nargs=3, help='parameters in QAA; step 7A') 
     parser.add_argument('--xi', metavar='', default=[0.015,0.002,0.6], type=float,nargs=3, help='parameters in QAA; step 7B') 
@@ -361,6 +361,6 @@ if __name__ == "__main__":
     if args.save:
         f_aph=os.path.join(os.path.dirname(args.file),'aph_'+os.path.basename(args.file))
         np.savetxt(f_aph, a_ph, delimiter=",")
-        print("===QAA comleted,the absorption of phytoplankton is written to file: {} ===".format(f_aph))
+        print("===QAA completed,the absorption of phytoplankton is written to file: {} ===".format(f_aph))
     else:
-        print("===QAA comleted,the absorption of phytoplankton at input bands [N*1,set 0 for failed values; unit: (1/m)]: \n {} ===".format(a_ph))
+        print("===QAA completed,the absorption of phytoplankton at input bands [N*1,set 0 for failed values; unit: (1/m)]: \n {} ===".format(a_ph))
