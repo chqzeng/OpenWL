@@ -8,10 +8,10 @@ Open Water&Light: this repository implements some water-and-light interaction al
 <a name="Rrs_simu"/>
 
 ## 1. Rrs simulation with given IOPs
-Simulate water-leaving raidance (Rrs) as used in: 
+Simulate water-leaving radiance (Rrs) as used in: 
 - [Zeng C, Binding C. The effect of mineral sediments on satellite chlorophyll-a retrievals from line-height algorithms using red and near-infrared bands. Remote Sensing. 2019;11(19). doi:10.3390/rs11192306](https://www.mdpi.com/2072-4292/11/19/2306)
 
-It uses a simplified light and water interactcion empricical model:  `Rrs = f *  bb / (a + bb)`,  which does not count the impact of wind speed, temperature, etc. It was implemented in Matlab 2017b licensed to ECCC. should be compatible to versions>=2015b.
+It uses a simplified water and light interaction empirical  model:  `Rrs = f *  bb / (a + bb)`,  which does not count the impact of wind speed, temperature, etc. It was implemented in Matlab 2017b licensed to ECCC. should be compatible to versions>=2015b.
 
 The purpose of this package is for fast computation and analysis with changing IOPs (e.g., chl concentration); for a stricter simulation, please consider [HydroLight/Ecolight](https://www.sequoiasci.com/product/hydrolight/) by Mobley, et al.
 
@@ -58,7 +58,7 @@ to run QAA, use [`./QAA/OpenWL_QAA6.py`](./QAA/OpenWL_QAA6.py), examples:
 - example1: use default parameters to run a **csv** file and save the result.
 ```
 >>python .\OpenWL_QAA6.py --file 'Rrs_QAA_test.csv' -S  
-===QAA comleted,the absorption of phytoplankton is written to file: aph_Rrs_QAA_test.csv ===
+===QAA completed,the absorption of phytoplankton is written to file: aph_Rrs_QAA_test.csv ===
 ```
 
 - example2: run **a single spectra** with customized parameters.
@@ -66,7 +66,7 @@ to run QAA, use [`./QAA/OpenWL_QAA6.py`](./QAA/OpenWL_QAA6.py), examples:
 >>python .\OpenWL_QAA6.py --wavelength '412,443,489,510,555,670' --Rrs '0.0012,0.00169,0.00329,0.00404,0.00748,0.00346' '--eta' 2.0 1.2 -0.6 '--waterIOP' '../IOPfiles/waterIOP_SmithandBaker.txt'
 ===input params:h55x :[-1.1459, -1.36583, -0.46927],A:5,h66x:[0.39, 1.14],
  eta:[2.0, 1.2, -0.6],zeta:[0.74, 0.2, 0.8],xi :[0.015, 0.002, 0.6]
-===QAA comleted,the absorption of phytoplankton at input bands [N*1,set 0 for failed values; unit: (1/m)]:
+===QAA completed,the absorption of phytoplankton at input bands [N*1,set 0 for failed values; unit: (1/m)]:
  [0.27205821 0.4042206  0.26982815 0.25434736 0.12065384 0.23782884] ===
 ```
 
@@ -81,8 +81,8 @@ optional arguments:
   -U , --rrs          an sample of under water remote sensing reflectance, dimensions:N*1
   -R , --Rrs          an sample of above water remote sensing reflectance, dimensions:N*1; if rrs is given, then Rrs is ignored
   -F , --file         a csv file of *above* water remote sensing reflectance, if --file given, --rrs/--Rrs are ignored ; dimenion:N*M; where there is N samples, with M bands,
-                      each row is a sample; exammple data: Rrs_QAA_test.csv
-  -W , --waterIOP     water absorption curve, dimensions:N*3: 1st column as wavelength, 2nd column abs value (1/m), 3rd for scatter, consistent with Hydrolight; if not provided,
+                      each row is a sample; example data: Rrs_QAA_test.csv
+  -W , --waterIOP     water absorption curve, dimensions: N*3: 1st column as wavelength, 2nd column abs value (1/m), 3rd for scatter, consistent with Hydrolight; if not provided,
                       use water abs and bb from ../IOPfiles/waterIOP_sea_water.txt
   --h55x              parameters in QAA; step 2 left IF, h0,h1,h2
   --A                 parameters in QAA; step 2 left IF, coeff in the log(...)
