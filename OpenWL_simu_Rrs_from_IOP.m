@@ -3,7 +3,8 @@ function [ Rrs_table, Rrs ] = OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm, varargin )
 %		Zeng C, Binding C. The effect of mineral sediments on satellite chlorophyll-a retrievals from line-height algorithms using red and near-infrared bands. Remote Sensing. 2019;11(19). doi:10.3390/rs11192306
 %		Author: Chui Zeng;  chqzeng@gmail.com
 %
-%It uses a very simplified light and water interactcion empricical model:  Rrs = f *  bb / (a + bb);
+%It uses a very simplified light and water interactcion empricical model:  Rrs = f/PI *  bb / (a + bb) according to:
+%	Albert, A. and C. D. Mobley (2003). "An analytical model for subsurface irradiance and remote sensing reflectance in deep and shallow case-2 waters." Optics Express 11(22): 2873-2890;
 %for a more strict simulation, please use HydroLight/Ecolight [Mobley, et al,https://www.sequoiasci.com/product/hydrolight/]
 %
 %Input arguments:
@@ -13,7 +14,7 @@ function [ Rrs_table, Rrs ] = OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm, varargin )
 %		wavelength: the list of wavelength to simulate the output Rrs; default: [400:5:850] nm
 %		bAB: flag to use Chl absorption with model: abs(chl) = A x chl^(1-B) model, otherwise use simpler: abs(chl)= a* x chl   model
 %       bSave: save the simulation result in current directory, in format: 'OpenLW_simu_Rrs_from_IOP_[%s]_chl[%d]_mspm[%d]_cdom[%f].csv'
-%		f:  the emperical value f in formula: Rrs = f *  bb / (a + bb);  default use 0.319 after Jerome et al. (1988). 
+%		f:  the emperical value f in formula: Rrs = f *  bb / (a + bb);  default use 0.319 for inland water after Jerome et al. (1988). 
 %		waterIOP: the file name of water IOP, in the './IOPfiles/'	folder, defualt is: 'waterIOP_sea_water.txt'  for clear fresh water
 %
 %Output arguments: [Rrs_table,Rrs]
