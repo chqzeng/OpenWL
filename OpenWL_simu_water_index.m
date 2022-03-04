@@ -35,8 +35,8 @@ wavelength=p.Results.wavelength;  %400:800;  %1nm resolution, too much for gener
 descr=load('Sensor_RSR.mat');    
  
 %run a simulation
-% OpenLW_simu_Rrs_from_IOP options, e.g.: ['waterIOP','waterIOP_SmithandBaker.txt','IOPname','LELW','wavelength',400:100:800,'bAB',false,'bSave',true]
-[Simu_Rrs,simu_spectra]=OpenLW_simu_Rrs_from_IOP(p.Results.v_chl,p.Results.v_mspm,p.Results.v_cdom,'wavelength',wavelength,'bSave',false); 
+% OpenWL_simu_Rrs_from_IOP options, e.g.: ['waterIOP','waterIOP_SmithandBaker.txt','IOPname','LELW','wavelength',400:100:800,'bAB',false,'bSave',true]
+[Simu_Rrs,simu_spectra]=OpenWL_simu_Rrs_from_IOP(p.Results.v_chl,p.Results.v_mspm,p.Results.v_cdom,'wavelength',wavelength,'bSave',false); 
 Chl=Simu_Rrs.Chl_mg_m3;
 
 %choose the sensor description 
