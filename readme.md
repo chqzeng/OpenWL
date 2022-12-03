@@ -7,14 +7,26 @@ Open Water&Light: this repository implements some water-and-light interaction al
 
 <a name="Rrs_simu"/>
 
-## 1. Rrs simulation with given IOPs
+## 1A. Rrs simulation with given IOPs [Python]
 Simulate water-leaving radiance (Rrs) as used in: 
 - [Zeng C, Binding C. The effect of mineral sediments on satellite chlorophyll-a retrievals from line-height algorithms using red and near-infrared bands. Remote Sensing. 2019;11(19). doi:10.3390/rs11192306](https://www.mdpi.com/2072-4292/11/19/2306)
 
 It uses a simplified water and light interaction empirical  model:  `Rrs = f/PI *  bb/(a + bb)` according to: Albert, A. and C. D. Mobley (2003)Optics Express. It does not count the impact of wind speed, temperature, etc. It was implemented in Matlab 2017b licensed to ECCC. should be compatible to versions>=2015b.
 
 The purpose of this package is for fast computation and analysis with changing IOPs (e.g., chl concentration); for a stricter simulation, please consider [HydroLight/Ecolight](https://www.sequoiasci.com/product/hydrolight/) by Mobley, et al.
+To simulate Rrs, use [`OpenWL_simu_Rrs_from_IOP.py`](OpenWL_simu_Rrs_from_IOP.py), examples:
+```
+>> python OpenLW_simu_Rrs_from_IOP.py --chl 1:3:31 --mspm '[1,5,10,20,30]' --cdom '[0.05]' 
+==== input argument inspection:...
+===== successfully finish the Rrs simulation ===========
+===== written simulation result to: ./[_Rrs , _rrs_].csv ===========
 
+>> python OpenLW_simu_Rrs_from_IOP.py --chl '[1]' --mspm '[1,5,10,20,30]' --cdom '[0.005 0.993]' --wavelength 400:5:901
+
+>> python OpenLW_simu_Rrs_from_IOP.py -h  
+```
+
+## 1B. Rrs simulation with given IOPs [Matlab]
 To simulate Rrs, use [`OpenWL_simu_Rrs_from_IOP.m`](OpenWL_simu_Rrs_from_IOP.m), examples:
 ```
 >> Rrs=OpenWL_simu_Rrs_from_IOP(0.1:5:20.1,1:10);
