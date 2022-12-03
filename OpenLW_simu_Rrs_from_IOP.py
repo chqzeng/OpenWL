@@ -209,8 +209,8 @@ if __name__ == "__main__":
     ##IOP files
     parser.add_argument('--sIOP', metavar='', type=str, default='./IOPfiles',help='the path to the direotory of IOP files. default: ./IOPfiles')  #sDir_IOP
     parser.add_argument('--IOPname', metavar='', type=str, default='LELW',help='the name of defualt IOP profile to be used. need to have IOP abs and scatter files stored in folder: sDir_IOP/[IOPname]_[abs|scatter]_coeff_[CDOM|chl|mineral].txt. default: LELW, for Lake Erie and Lake Winnipege averaged') 
-    parser.add_argument('-N','--wavelength', metavar='', type=str, default=range(400,851,5),
-                        help='the wavelength of the output Rrs or rrs bands. default:[400,405,410,...,850]')
+    parser.add_argument('-N','--wavelength', metavar='', type=str_to_value_list, default=range(400,851,5),
+                        help='the wavelength of the output Rrs or rrs bands. in format:  min:interval:max , or [wav1,wav2, wav3,...].  default:[400,405,410,...,850]')
     parser.add_argument('--bAB', metavar='',type=str2bool, nargs='?',const=False, default=False, help="whether use the abs_chl=A*[chl]^(-B) model? if yes, will need a ###_chl_AB.txt for absorption profile with two abs columns. default False, \n for True use:'yes', 'true', 't', 'y', '1' \n ; for False, use: 'no', 'false', 'f', 'n', '0', same for the other bool parameters")
     
     ##parameters
@@ -252,18 +252,11 @@ if __name__ == "__main__":
     #args = parser.parse_args(['-F','Rrs_QAA_test.csv'])
     args = parser.parse_args()
     
-    #test
-    #v_chl=[1,2,3,4,5,10,20,50]
-    #v_mspm=[5,3,1]
-    #Rrs,rrs=OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',IOPname='LELW',
-    #                             wavelength=range(400,851,5),bAB=True,f=None,bLee=False, str_path_waterIOP='waterIOP_sea_water.txt',
-    #                             header_lines=10,water_bb2b_ratio=0.5,chl_bb2b_ratio=0.01,mspm_bb2b_ratio=0.02,
-    #                             theta_sun=0,theta_view=0,wind_speed=5,eta=0.52,gamma=1.6)
     print(f"==== input argument inspection:v_chl {args.chl},v_mspm={args.mspm} ,v_cdom={args.cdom},sDir_IOP={args.sIOP},IOPname={args.IOPname}, \
                                  wavelength={args.wavelength},bAB={args.bAB},f={args.f},bLee={args.bLee}, str_path_waterIOP={args.waterIOP},header_lines={args.header_lines},\
                                  water_bb2b_ratio={args.water_bb2b_ratio},chl_bb2b_ratio={args.chl_bb2b_ratio},mspm_bb2b_ratio={args.mspm_bb2b_ratio},\
                                  theta_sun={args.theta_sun},theta_view={args.theta_view},wind_speed={args.wind_speed},eta={args.eta},gamma={args.gamma} ")
-#   sys.exit(0)                              
+                            
     Rrs,rrs=OpenLW_simu_Rrs_from_IOP(args.chl,args.mspm ,v_cdom=args.cdom,sDir_IOP=args.sIOP,IOPname=args.IOPname,
                                  wavelength=args.wavelength,bAB=args.bAB,f=args.f,bLee=args.bLee, str_path_waterIOP=args.waterIOP,header_lines=args.header_lines,
                                  water_bb2b_ratio=args.water_bb2b_ratio,chl_bb2b_ratio=args.chl_bb2b_ratio,mspm_bb2b_ratio=args.mspm_bb2b_ratio,
