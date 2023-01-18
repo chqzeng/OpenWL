@@ -68,7 +68,7 @@ def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelen
     
 def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',IOPname='CCIW',
                              wavelength=[v for v in range(400,851,5)],bAB=False,f=0.319,bLee=False,str_path_waterIOP='waterIOP_sea_water.txt',
-                             header_lines=10,water_bb2b_ratio=0.5,chl_bb2b_ratio=0.01,mspm_bb2b_ratio=0.02,
+                             header_lines=10,water_bb2b_ratio=0.5,chl_bb2b_ratio=0.01,mspm_bb2b_ratio=0.02,bFluo=True,FluoCoeff=[0.0992,0.40,0.078],
                              theta_sun=0,theta_view=0,wind_speed=5,eta=0.52,gamma=1.6):
     """
     ## this is the implementation of water-leaving raidance (Rrs) simulation as used in: 
@@ -204,12 +204,18 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
     ##-----------fluorescence rrs ---------------
     ##calcualte the abs_(cdom+nap) at 443nm
     #abs_cdom_nap_443= abs_CDOM+ abs_MSPM #using it represent BOTH abs and bb, assuming they are correlated. Eq. 7.25-7.27
-    a_mspm_cdom=np.matmul(IOP_list[1,:].reshape([-1,1]),IOP_MSPM_a.reshape([1,-1]))+\
-                np.matmul(IOP_list[2,:].reshape([-1,1]),IOP_CDOM_a.reshape([1,-1]))
-    f443 = interpolate.interp1d(wavelength, a_mspm_cdom, fill_value='extrapolate')
-    abs_cdom_nap_443=np.transpose(f443(443))  ##Nx1
-    Rrs_f=Rrs_Fluorescence (IOP_list[1,:],abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],phi_f=0.01)
-
+    Rrs_f=0
+    if bFluo:
+        try:
+            a_mspm_cdom=np.matmul(IOP_list[1,:].reshape([-1,1]),IOP_MSPM_a.reshape([1,-1]))+\
+                        np.matmul(IOP_list[2,:].reshape([-1,1]),IOP_CDOM_a.reshape([1,-1]))
+            f443 = interpolate.interp1d(wavelength, a_mspm_cdom, fill_value='extrapolate')
+            abs_cdom_nap_443=np.transpose(f443(443))  ##Nx1
+            Rrs_f=Rrs_Fluorescence (IOP_list[1,:],abs_cdom_nap_443,coeff_x=FluoCoeff,phi_f=0.01)  #FluoCoeff:[0.0992,0.40,0.078]
+        except Exception as e:
+            print("failed to calcuate the Rrs contribution from fluorescence, will ignore")
+            print(e)
+            pass
     
     ##from r_rs(λ) (under water ) to Rrs(λ) (above water)
     #Lee, Z.-P., Carder, K.L., Mobley, C.D., Steward, R.G., Patch, J.S., 1998. Hyperspectral remote sensing for shallow waters: 1. A semi-analytical model. Appl. Opt. 37, 6329-6338.
@@ -273,6 +279,10 @@ if __name__ == "__main__":
                         help='the wavelength of the output Rrs or rrs bands. in format:  min:interval:max , or [wav1,wav2, wav3,...].  default:[400,405,410,...,850]')
     parser.add_argument('--bAB', metavar='',type=str2bool, nargs='?',const=False, default=False, help="whether use the abs_chl=A*[chl]^(-B) model? if yes, will need a ###_chl_AB.txt for absorption profile with two abs columns. default False, \n for True use:'yes', 'true', 't', 'y', '1' \n ; for False, use: 'no', 'false', 'f', 'n', '0', same for the other bool parameters")
     
+    ##parameters for fluorescence
+    parser.add_argument('--bFluo', metavar='',type=str2bool, nargs='?',const=False, default=True, help="whether compute the contribution of Fluorescence to Rrs? according to Gilerson, A. A. and Y. Huot (2017). default True, \n for True use:'yes', 'true', 't', 'y', '1' \n ; for False, use: 'no', 'false', 'f', 'n', '0', same for the other bool parameters")
+    parser.add_argument('--FluoCoeff', metavar='', type=str_to_value_list, default=[0.092,0.40,0.078], help='the estimate the coefficients X=[x1, x2, x3] in Gilerson, A. A. and Y. Huot (2017) Eq 7.26, in format:  [x1,x2, x3,...]')
+    
     ##parameters
     parser.add_argument('-f', metavar='', default=None, type=float, help='parameters f for: f/Q * bb/(a+bb); e.g.,0.319. if set, then will ignore further Lee1998 model or Albert2004 models') 
     parser.add_argument('--bLee', metavar='',type=str2bool, nargs='?',const=False, default=False, help="whether use the Lee et al 1999 model for the rrs=f(u). default False, to use the Ablert2004 model; \n for True use:'yes', 'true', 't', 'y', '1' \n ; for False, use: 'no', 'false', 'f', 'n', '0'")
@@ -320,12 +330,12 @@ if __name__ == "__main__":
     #                             header_lines=10,water_bb2b_ratio=0.5,chl_bb2b_ratio=0.01,mspm_bb2b_ratio=0.02,
     #                             theta_sun=0,theta_view=0,wind_speed=5,eta=0.52,gamma=1.6)
     print(f"==== input argument inspection:v_chl {args.chl},v_mspm={args.mspm} ,v_cdom={args.cdom},sDir_IOP={args.sIOP},IOPname={args.IOPname}, \
-                                 wavelength={args.wavelength},bAB={args.bAB},f={args.f},bLee={args.bLee}, str_path_waterIOP={args.waterIOP},header_lines={args.header_lines},\
+                                 wavelength={args.wavelength},bAB={args.bAB},f={args.f},bLee={args.bLee}, bFluo={args.bFluo},FluoCoeff={args.FluoCoeff}, str_path_waterIOP={args.waterIOP},header_lines={args.header_lines},\
                                  water_bb2b_ratio={args.water_bb2b_ratio},chl_bb2b_ratio={args.chl_bb2b_ratio},mspm_bb2b_ratio={args.mspm_bb2b_ratio},\
                                  theta_sun={args.theta_sun},theta_view={args.theta_view},wind_speed={args.wind_speed},eta={args.eta},gamma={args.gamma} ")
                             
     Rrs,rrs=OpenLW_simu_Rrs_from_IOP(args.chl,args.mspm ,v_cdom=args.cdom,sDir_IOP=args.sIOP,IOPname=args.IOPname,
-                                 wavelength=args.wavelength,bAB=args.bAB,f=args.f,bLee=args.bLee, str_path_waterIOP=args.waterIOP,header_lines=args.header_lines,
+                                 wavelength=args.wavelength,bAB=args.bAB,f=args.f,bLee=args.bLee,bFluo=args.bFluo,FluoCoeff=args.FluoCoeff, str_path_waterIOP=args.waterIOP,header_lines=args.header_lines,
                                  water_bb2b_ratio=args.water_bb2b_ratio,chl_bb2b_ratio=args.chl_bb2b_ratio,mspm_bb2b_ratio=args.mspm_bb2b_ratio,
                                  theta_sun=args.theta_sun,theta_view=args.theta_view,wind_speed=args.wind_speed,eta=args.eta,gamma=args.gamma)    
     if (Rrs is None) or (rrs is None): 
