@@ -16,7 +16,6 @@ def load_iop_file(str_path,header_lines=10,skip_footer=1,wavelength=range(400,85
     else:    
         f = interpolate.interp1d(IOP[:,0], np.transpose(IOP[:,1:]), fill_value='extrapolate')
         return np.squeeze(np.transpose(f(wavelength)))  #need to convert the shape
-<<<<<<< HEAD
 
 def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelength=np.array(range(400,851,5)),phi_f=0.01,sDir_IOP='./IOPfiles',str_path_Ed='Ed_Hydrolight_CA.txt'):
     """
@@ -51,7 +50,7 @@ def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelen
     # Lf_685=0.54 * 1/(4*np.pi) * phi_f/Cf * Qa *  ...
     ##=---------------full model : Eq. 7.5  , to be implemented------------------------
     
-    ##=---------------approxmiated model : Eq. 7.27  ------------------------
+    ##=---------------approxmiated model : Eq. 7.25-7.27  ------------------------
     #coeff_x=[x1,x2,x3]=0.0992,0.40,0.078   #0.0375, 0.32,0.032 according to Eq.18, A. Gilerson, J. Zhou, S. Hlaing, I. Ioannou, J. Schalles, B. Gross, F. Moshary, and S. Ahmed, "Fluorescence component in the reflectance spectra from coastal waters. Dependence on water composition," Opt. Express 15, 15702-15721 (2007) 
     #Lf_685=phi_f * coeff_x[0]*v_chl / (1+coeff_x[1]*abs_cdom_nap_443 + coeff_x[2]*v_chl) 
     Lf_685=phi_f * coeff_x[0]*v_chl.reshape([-1,1]) / (1+coeff_x[1]*abs_cdom_nap_443.reshape([-1,1]) + coeff_x[2]* v_chl.reshape([-1,1]))
@@ -69,11 +68,6 @@ def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelen
     
 def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',IOPname='CCIW',
                              wavelength=[v for v in range(400,851,5)],bAB=False,f=0.319,bLee=False,str_path_waterIOP='waterIOP_sea_water.txt',
-=======
- 
-def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',IOPname='CCIW',
-                             wavelength=range(400,851,5),bAB=False,f=0.319,bLee=False,str_path_waterIOP='waterIOP_sea_water.txt',
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
                              header_lines=10,water_bb2b_ratio=0.5,chl_bb2b_ratio=0.01,mspm_bb2b_ratio=0.02,
                              theta_sun=0,theta_view=0,wind_speed=5,eta=0.52,gamma=1.6):
     """
@@ -150,11 +144,7 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
     if IOP_MSPM_a is None: 
         print(f"=====failed to load IOP file : {str_path_abs_mspm}, will exit")
         return None,None
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
     #load mass-specific scatter properties of chl and mspm
     str_path_sct_chl=os.path.join(sDir_IOP,f'{IOPname}_scatter_coeff_chl.txt')
     str_path_sct_mspm=os.path.join(sDir_IOP,f'{IOPname}_scatter_coeff_mineral.txt')  
@@ -170,11 +160,7 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
 	#bb/b ratio : from scatter to back-scatter
     IOP_CHL_bb=IOP_CHL_b*chl_bb2b_ratio;   
     IOP_MSPM_bb=IOP_MSPM_b*mspm_bb2b_ratio;   
-<<<<<<< HEAD
     
-=======
-
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
     #mix the chl, mspm,cdom to different combinations  
     XX, YY,ZZ = np.meshgrid(v_chl,v_mspm,v_cdom)
     IOP_list = np.stack([XX.flatten(), YY.flatten(), ZZ.flatten()]) #the list of IOP in shape: 3xN; where N is the sample number
@@ -214,7 +200,6 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
         f_rs=0.0512*(1+ 4.6659*u + 7.8387*u**2 + 5.4571*u**3)*(1+ 0.1098/np.cos(theta_sun/180*np.pi))*(1+ 0.4021/np.cos(theta_view/180*np.pi))*(1-0.0044*wind_speed)
     rrs=f_rs * u
     
-<<<<<<< HEAD
     
     ##-----------fluorescence rrs ---------------
     ##calcualte the abs_(cdom+nap) at 443nm
@@ -226,21 +211,14 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
     Rrs_f=Rrs_Fluorescence (IOP_list[1,:],abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],phi_f=0.01)
 
     
-=======
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
     ##from r_rs(λ) (under water ) to Rrs(λ) (above water)
     #Lee, Z.-P., Carder, K.L., Mobley, C.D., Steward, R.G., Patch, J.S., 1998. Hyperspectral remote sensing for shallow waters: 1. A semi-analytical model. Appl. Opt. 37, 6329-6338.
     ##eta: the water-to-air radiance divergence factor
     ##gamma: accounts for the effects of internal reflection from water to air
     ##Rrs_surf: the reflections at the water surface, ignore here temporarily
     #eta,gamma=0.52, 1.6
-<<<<<<< HEAD
     Rrs_surf=0   #not count environment Rrs yet
     Rrs=eta*rrs / (1-gamma*rrs) + Rrs_f +Rrs_surf
-=======
-    Rrs_surf=0
-    Rrs=eta*rrs / (1-gamma*rrs) +Rrs_surf
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
     
     ##convert numpy array to pandas table as output
     cols=['CHL','MSPM','CDOM']+[f'{w}nm' for w in wavelength]
@@ -334,7 +312,6 @@ if __name__ == "__main__":
     #args = parser.parse_args(['-F','Rrs_QAA_test.csv'])
     args = parser.parse_args()
     
-<<<<<<< HEAD
     #test
     #v_chl=[1,2,3,4,5,10,20,50]
     #v_mspm=[5,3,1]
@@ -342,8 +319,6 @@ if __name__ == "__main__":
     #                             wavelength=range(400,851,5),bAB=True,f=None,bLee=False, str_path_waterIOP='waterIOP_sea_water.txt',
     #                             header_lines=10,water_bb2b_ratio=0.5,chl_bb2b_ratio=0.01,mspm_bb2b_ratio=0.02,
     #                             theta_sun=0,theta_view=0,wind_speed=5,eta=0.52,gamma=1.6)
-=======
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
     print(f"==== input argument inspection:v_chl {args.chl},v_mspm={args.mspm} ,v_cdom={args.cdom},sDir_IOP={args.sIOP},IOPname={args.IOPname}, \
                                  wavelength={args.wavelength},bAB={args.bAB},f={args.f},bLee={args.bLee}, str_path_waterIOP={args.waterIOP},header_lines={args.header_lines},\
                                  water_bb2b_ratio={args.water_bb2b_ratio},chl_bb2b_ratio={args.chl_bb2b_ratio},mspm_bb2b_ratio={args.mspm_bb2b_ratio},\
@@ -368,8 +343,4 @@ if __name__ == "__main__":
         Rrs.to_csv(prefix+r'_Rrs.csv',index=False)
         rrs.to_csv(prefix+r'_rrs_.csv',index=False)  #bug of to_csv:  Windows path case insensitive. need to use a different file name; https://github.com/pandas-dev/pandas/issues/19126
         
-<<<<<<< HEAD
         print(f"===== written simulation result to: {prefix+'[_Rrs , _rrs_].csv'} ===========")
-=======
-        print(f"===== written simulation result to: {prefix+'[_Rrs , _rrs_].csv'} ===========")
->>>>>>> fd961e02cb8d3d78f37fd2c6832223e4c92d8838
