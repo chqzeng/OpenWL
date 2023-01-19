@@ -50,10 +50,13 @@ def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelen
     # Lf_685=0.54 * 1/(4*np.pi) * phi_f/Cf * Qa *  ...
     ##=---------------full model : Eq. 7.5  , to be implemented------------------------
     
+    ##test using Eq. 7.23
+    #Lf_685=0.15 * v_chl.reshape([-1,1])  / (1 +  0.2 * v_chl.reshape([-1,1]) )
+    
     ##=---------------approxmiated model : Eq. 7.25-7.27  ------------------------
     #coeff_x=[x1,x2,x3]=0.0992,0.40,0.078   #0.0375, 0.32,0.032 according to Eq.18, A. Gilerson, J. Zhou, S. Hlaing, I. Ioannou, J. Schalles, B. Gross, F. Moshary, and S. Ahmed, "Fluorescence component in the reflectance spectra from coastal waters. Dependence on water composition," Opt. Express 15, 15702-15721 (2007) 
     #Lf_685=phi_f * coeff_x[0]*v_chl / (1+coeff_x[1]*abs_cdom_nap_443 + coeff_x[2]*v_chl) 
-    Lf_685=phi_f * coeff_x[0]*v_chl.reshape([-1,1]) / (1+coeff_x[1]*abs_cdom_nap_443.reshape([-1,1]) + coeff_x[2]* v_chl.reshape([-1,1]))
+    Lf_685= coeff_x[0]*v_chl.reshape([-1,1]) / (1+coeff_x[1]*abs_cdom_nap_443.reshape([-1,1]) + coeff_x[2]* v_chl.reshape([-1,1]))
     #Ed: 1100 W m-2 μm-1 from the Hydrolight model spectrum when Ed measurements were not available.
     ##=---------------approxmiated model : Eq. 7.27  ------------------------
     
@@ -211,7 +214,7 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
                         np.matmul(IOP_list[2,:].reshape([-1,1]),IOP_CDOM_a.reshape([1,-1]))
             f443 = interpolate.interp1d(wavelength, a_mspm_cdom, fill_value='extrapolate')
             abs_cdom_nap_443=np.transpose(f443(443))  ##Nx1
-            Rrs_f=Rrs_Fluorescence (IOP_list[1,:],abs_cdom_nap_443,coeff_x=FluoCoeff,phi_f=0.01)  #FluoCoeff:[0.0992,0.40,0.078]
+            Rrs_f=Rrs_Fluorescence (IOP_list[0,:],abs_cdom_nap_443,coeff_x=FluoCoeff)  #FluoCoeff:[0.0992,0.40,0.078]
         except Exception as e:
             print("failed to calcuate the Rrs contribution from fluorescence, will ignore")
             print(e)
@@ -275,7 +278,7 @@ if __name__ == "__main__":
     ##IOP files
     parser.add_argument('--sIOP', metavar='', type=str, default='./IOPfiles',help='the path to the direotory of IOP files. default: ./IOPfiles')  #sDir_IOP
     parser.add_argument('--IOPname', metavar='', type=str, default='LELW',help='the name of defualt IOP profile to be used. need to have IOP abs and scatter files stored in folder: sDir_IOP/[IOPname]_[abs|scatter]_coeff_[CDOM|chl|mineral].txt. default: LELW, for Lake Erie and Lake Winnipege averaged') 
-    parser.add_argument('-N','--wavelength', metavar='', type=str_to_value_list, default=range(400,851,5),
+    parser.add_argument('-N','--wavelength', metavar='', type=str_to_value_list, default=[v for v in range(400,851,5)],
                         help='the wavelength of the output Rrs or rrs bands. in format:  min:interval:max , or [wav1,wav2, wav3,...].  default:[400,405,410,...,850]')
     parser.add_argument('--bAB', metavar='',type=str2bool, nargs='?',const=False, default=False, help="whether use the abs_chl=A*[chl]^(-B) model? if yes, will need a ###_chl_AB.txt for absorption profile with two abs columns. default False, \n for True use:'yes', 'true', 't', 'y', '1' \n ; for False, use: 'no', 'false', 'f', 'n', '0', same for the other bool parameters")
     
@@ -320,7 +323,8 @@ if __name__ == "__main__":
     parser.add_argument('--out_prefix',metavar='',  default=None, help='the output csv files prefix, can be a full path. default is no prefix, will rewrite the two files in current folder [_Rrs.csv, _rrs.csv')
     
     #args = parser.parse_args(['-F','Rrs_QAA_test.csv'])
-    args = parser.parse_args()
+    args = parser.parse_args(['--chl', '[0.03, 0.3, 1, 10, 30,100]', '--mspm', '[5]' ,'--cdom' ,'[0.05]' ,'--bFluo', 'yes'])
+#    args = parser.parse_args()
     
     #test
     #v_chl=[1,2,3,4,5,10,20,50]
