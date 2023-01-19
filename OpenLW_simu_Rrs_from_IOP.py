@@ -25,6 +25,9 @@ def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelen
         abs_cdom_nap_443: the sum of CDOM and NAP absorption at 443 nm, According to Eq. 7.25 in the above literature;  size: Nx1 same as v_chl
         wavelength: wavelength range of estimation
         
+        Note the valid range for this modelling is [chl] in :05 --- 40 mg*m-3 and  φf=1%
+        for [NAP] > 10 g/m3, the contribution of fluorescence to the total reflectance peak drops below 5-10%,
+        
     """
     
     if isinstance(str_path_Ed, type(None)) :
@@ -59,6 +62,8 @@ def Rrs_Fluorescence (v_chl,abs_cdom_nap_443,coeff_x=[0.0992,0.40,0.078],wavelen
     Lf_685= coeff_x[0]*v_chl.reshape([-1,1]) / (1+coeff_x[1]*abs_cdom_nap_443.reshape([-1,1]) + coeff_x[2]* v_chl.reshape([-1,1]))
     #Ed: 1100 W m-2 μm-1 from the Hydrolight model spectrum when Ed measurements were not available.
     ##=---------------approxmiated model : Eq. 7.27  ------------------------
+    
+    Lf_685= 0.001 * Lf_685  #convert the unit 1/μm to 1/nm; Ed: (W/m^-2 nm-1)  v.s. Lf:  (W/m^-2 μm-1) * (mg/m3)-1
     
     # The spectral shape of fluorescence, Lf, was modeled as a Gaussian spectral profile centered at 685 nm, having a full width at half maximum (FWHM) of 25 nm
     #Lf_distribute=lambda wv:  np.exp(-4 * np.log(2) * ((wv -685)/25)**2 ) 
@@ -204,7 +209,7 @@ def OpenLW_simu_Rrs_from_IOP(v_chl,v_mspm ,v_cdom=[0.994],sDir_IOP='./IOPfiles',
     rrs=f_rs * u
     
     
-    ##-----------fluorescence rrs ---------------
+    ##-----------fluorescence Rrs ---------------
     ##calcualte the abs_(cdom+nap) at 443nm
     #abs_cdom_nap_443= abs_CDOM+ abs_MSPM #using it represent BOTH abs and bb, assuming they are correlated. Eq. 7.25-7.27
     Rrs_f=0
@@ -323,8 +328,8 @@ if __name__ == "__main__":
     parser.add_argument('--out_prefix',metavar='',  default=None, help='the output csv files prefix, can be a full path. default is no prefix, will rewrite the two files in current folder [_Rrs.csv, _rrs.csv')
     
     #args = parser.parse_args(['-F','Rrs_QAA_test.csv'])
-    args = parser.parse_args(['--chl', '[0.03, 0.3, 1, 10, 30,100]', '--mspm', '[5]' ,'--cdom' ,'[0.05]' ,'--bFluo', 'yes'])
-#    args = parser.parse_args()
+#    args = parser.parse_args(['--chl', '[0.03, 0.3, 1, 10, 30,100]', '--mspm', '[5]' ,'--cdom' ,'[0.05]' ,'--bFluo', 'yes'])
+    args = parser.parse_args()
     
     #test
     #v_chl=[1,2,3,4,5,10,20,50]
